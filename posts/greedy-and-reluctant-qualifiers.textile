@@ -1,5 +1,6 @@
 title: "Greedy and Reluctant Qualifiers"
 published: t
+category: tricks
 created_at: 2009-05-15 08:52:03
 
 A common gotcha when using regular expressions occurs when using the (greedy) qualifiers + ? and *. These qualifiers will attempt to make the longest match they possibly can.

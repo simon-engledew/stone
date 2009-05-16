@@ -1,5 +1,6 @@
 title: "Setting The Default Java Virtual Machine on Ubuntu"
 published: t
+category: sysadmin
 created_at: 2009-01-08 11:21:06
 
 Select the default Ubuntu JVM with @update-alternatives@:

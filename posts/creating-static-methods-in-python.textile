@@ -1,5 +1,6 @@
 title: "Creating Static Methods in Python"
 published: t
+category: python
 created_at: 2009-02-13 15:59:22
 
 Static methods can be a little confusing if you come to Python from other languages in which they are first class citizens. To create a static method you need to pass an existing method through @staticmethod()@:

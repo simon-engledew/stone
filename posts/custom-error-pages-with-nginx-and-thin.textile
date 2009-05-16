@@ -1,5 +1,6 @@
 title: "Custom error pages with Nginx and Thin"
 published: t
+category: rails
 created_at: 2008-11-21 13:23:57
 
 If you are using Nginx to proxy to another web server such as Thin or Mongrel, chances are you have had trouble getting your custom error pages to return the correct status codes.

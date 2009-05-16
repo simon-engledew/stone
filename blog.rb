@@ -12,6 +12,7 @@ class Post
     attributes = YAML.load(match[1])
 
     @content = match[2]
+    @category = attributes['category']
     @published = attributes['published']
     @created_at = DateTime.parse(attributes['created_at'])
     @title = attributes['title']
@@ -33,8 +34,17 @@ class Post
     end
   
     def all_by_permalink
-      @cache[:all_by_permalink] ||= ActiveSupport::OrderedHash.new.tap do |all_by_permalink|
-        Post.all.each {|post| all_by_permalink[post.permalink] = post}
+      @cache[:all_by_permalink] ||= ActiveSupport::OrderedHash.new.tap do |hash|
+        Post.all.each {|post| hash[post.permalink] = post}
+      end
+    end
+    
+    def all_by_category
+      @cache[:all_by_category] ||= ActiveSupport::OrderedHash.new.tap do |hash|
+        Post.all.each do |post|
+          hash[post.category] ||= []
+          hash[post.category] << post
+        end
       end
     end
     
@@ -45,14 +55,8 @@ class Post
   
   Post.reload!
   
-  attr_reader :content, :published, :created_at, :title, :permalink
+  attr_reader :content, :published, :created_at, :title, :permalink, :category
 end
-
-ROOT = File.expand_path(File.dirname(__FILE__)) unless Object.const_defined?(:ROOT)
-
-Templates = Stone::EngineHouse.new(File.join(ROOT, 'templates')) { |engine| Stone::Template.new(engine) }
-Layouts = Stone::EngineHouse.new(File.join(ROOT, 'layouts')) { |engine| Stone::Layout.new(engine) }
-Stylesheets = Stone::EngineHouse.new(File.join(ROOT, 'sass'), :load_paths => [File.join(ROOT, 'sass')], :style => ENV['RACK_ENV'] == 'development' ? :expanded : :compressed)
 
 before do
   if ENV['RACK_ENV'] == 'development'
@@ -89,6 +93,11 @@ end
 get '/posts/:month' do
   pass unless posts = Post.all_by_date[params[:month]]
   render('index.haml', :title => params[:month], :posts => posts)
+end
+
+get '/posts/:category' do
+  pass unless posts = Post.all_by_category[params[:category]]
+  render('index.haml', :title => params[:category], :posts => posts)
 end
 
 get '/stylesheets/application.css' do

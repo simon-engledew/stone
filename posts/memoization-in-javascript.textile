@@ -1,5 +1,6 @@
 title: "Memoization In Javascript"
 published: t
+category: javascript
 created_at: 2008-11-05 16:46:19
 
 <div class="code"><pre><code>function memoize(f) {

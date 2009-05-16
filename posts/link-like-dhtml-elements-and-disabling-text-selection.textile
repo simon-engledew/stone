@@ -1,5 +1,6 @@
 title: "Link-like DHTML elements and disabling text selection"
 published: t
+category: javascript
 created_at: 2008-10-10 11:01:38
 
 When turning a non-anchor element into an onclickable using JavaScript, you may have noticed that browsers will still allow users to select text ranges.

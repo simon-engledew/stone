@@ -1,5 +1,6 @@
 title: "Reflection and Introspection Over Modules and Packages In Python"
 published: t
+category: python
 created_at: 2009-03-06 11:39:28
 
 Someone Twitter me if I'm missing something, but I couldn't find a core way of doing reflection over packages in Python.

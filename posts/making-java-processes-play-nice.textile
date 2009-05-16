@@ -1,5 +1,6 @@
 title: "Making Java Processes Play Nice"
 published: t
+category: tricks
 created_at: 2009-05-14 14:50:06
 
 Looking around, it seems that there is no easy way to stop Java from eating all your system resources when running a particularly heavy-going task.

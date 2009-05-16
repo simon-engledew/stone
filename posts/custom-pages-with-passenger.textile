@@ -1,5 +1,6 @@
 title: "Custom 404 Pages with Passenger"
 published: t
+category: rails
 created_at: 2008-12-11 09:53:28
 
 On failing to match a route, Rails 2.1.2 appears to rescue the @ActionController::RoutingError@ with its stock template (@/action_controller/templates/rescues/layout.erb@) and then returns an upstream 404 error code -- even if you've defined a custom @rescue_from@ in @ActionController@:

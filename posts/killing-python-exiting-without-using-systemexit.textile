@@ -1,5 +1,6 @@
 title: "Killing Python: Exiting Without Using SystemExit"
 published: t
+category: python
 created_at: 2009-03-05 16:10:28
 
 Usually in python you exit a script programmatically by raising @SystemExit@ or calling @sys.exit@. Both methods send an exception hurtling up the call stack, allowing every level of your program to execute @finally@ statements and exit cleanly.

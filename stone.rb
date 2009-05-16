@@ -127,3 +127,16 @@ module Stone
     attr_reader :source, :options
   end
 end
+
+ROOT = File.dirname(__FILE__) unless Object.const_defined?(:ROOT)
+
+Templates = Stone::EngineHouse.new(File.join(ROOT, 'templates')) do |engine|
+  Stone::Template.new(engine)
+end
+Layouts = Stone::EngineHouse.new(File.join(ROOT, 'layouts')) do |engine|
+  Stone::Layout.new(engine)
+end
+Stylesheets = Stone::EngineHouse.new(File.join(ROOT, 'sass'),
+  :load_paths => [File.join(ROOT, 'sass')],
+  :style => ENV['RACK_ENV'] == 'development' ? :expanded : :compressed
+)

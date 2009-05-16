@@ -45,6 +45,13 @@
                   %a{:href => "/posts/#{escape(date)}"}= date
                   %span.count== (#{posts.size})
             %hr
+            %h4 By Category
+            %ul#posts-by-category
+              - Post.all_by_category.each do |category, posts|
+                %li
+                  %a{:href => "/posts/#{escape(category)}"}= category
+                  %span.count== (#{posts.size})
+            %hr
             %h4 About
             %p &copy; Simon Engledew 2008.
             %p Powered by Sinatra, <a href="http://github.com/toothygoose/stone">Stone</a> &amp; pixie magic. 

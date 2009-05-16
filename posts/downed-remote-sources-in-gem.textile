@@ -1,5 +1,6 @@
 title: "Downed remote sources in Gem"
 published: t
+category: ruby
 created_at: 2008-06-19 11:30:38
 
 To remove a broken remote source from your Ruby Gem environment, edit your <code>~/.gemrc</code> file.
