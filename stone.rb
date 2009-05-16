@@ -84,7 +84,6 @@ module Stone
     class << self
 
       def load(filename, options = {})
-        $stdout.print ">> Loading engine for #{filename}\n"
         source = File.open(filename, 'r').read
         case extension = File.extname(filename)
           when '.haml' then Haml::Engine.new(source, options)
@@ -94,6 +93,24 @@ module Stone
         end
       end
 
+    end
+  end
+  
+  class EngineHouse
+    def initialize(root, options = {}, &block)
+      @root = root
+      @options = options
+      @block = block || proc {|engine| engine}
+      self.reload!
+    end
+
+    def reload!
+      @cache = {}
+    end
+
+    def [](filename)
+      filename = File.join(@root, filename)
+      @cache[filename] ||= @block.call(Stone::EngineFactory.load(filename, @options))
     end
   end
   
@@ -110,35 +127,3 @@ module Stone
     attr_reader :source, :options
   end
 end
-
-ROOT = File.expand_path(File.dirname(__FILE__)) unless Object.const_defined?(:ROOT)
-
-class EngineHouse
-  def initialize(root, options = {}, &block)
-    @root = root
-    @options = options
-    @block = block || proc {|engine| engine}
-    self.reload!
-  end
-  
-  def reload!
-    @cache = {}
-  end
-  
-  def [](filename)
-    filename = File.join(@root, filename)
-    @cache[filename] ||= @block.call(Stone::EngineFactory.load(filename, @options))
-  end
-end
-
-Templates = EngineHouse.new(File.join(ROOT, 'templates')) do |engine|
-  Stone::Template.new(engine)
-end
-
-Layouts = EngineHouse.new(File.join(ROOT, 'layouts')) do |engine|
-  Stone::Layout.new(engine)
-end
-
-Stylesheets = EngineHouse.new(File.join(ROOT, 'sass'), :load_paths => [File.join(ROOT, 'sass')], :style => :expanded)
-
-

@@ -48,6 +48,12 @@ class Post
   attr_reader :content, :published, :created_at, :title, :permalink
 end
 
+ROOT = File.expand_path(File.dirname(__FILE__)) unless Object.const_defined?(:ROOT)
+
+Templates = Stone::EngineHouse.new(File.join(ROOT, 'templates')) { |engine| Stone::Template.new(engine) }
+Layouts = Stone::EngineHouse.new(File.join(ROOT, 'layouts')) { |engine| Stone::Layout.new(engine) }
+Stylesheets = Stone::EngineHouse.new(File.join(ROOT, 'sass'), :load_paths => [File.join(ROOT, 'sass')], :style => ENV['RACK_ENV'] == 'development' ? :expanded : :compressed)
+
 before do
   if ENV['RACK_ENV'] == 'development'
     Templates.reload!

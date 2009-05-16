@@ -3,6 +3,7 @@
   %head
     %title== Toothygoose - #{@title || 'Untitled'}
     %link{:href => '/stylesheets/application.css', :media => 'screen', :rel => 'stylesheet', :type => 'text/css'}
+    %link{:href => '/posts.rss', :rel => :alternate, :type => 'application/rss+xml', :title => 'RSS Feed'}
     != yield :head
   %body
     #header-container
@@ -33,24 +34,29 @@
             %hr
             %h4 Months
             %ul#posts-by-date
-              - @posts_by_date.keys.each do |time|
+              - @posts_by_date.each do |date, posts|
                 %li
-                  %a{:href => "/posts/#{escape(time)}"}= time
+                  %a{:href => "/posts/#{escape(date)}"}= date
+                  %span.count== (#{posts.size})
             %hr
             %h4 About
             %p &copy; Simon Engledew 2008.
-            %p Powered by Sinatra, <a href="http://github.com/toothygoose/stone">Stone</a> &amp; faerie-dust. 
+            %p Powered by Sinatra, <a href="http://github.com/toothygoose/stone">Stone</a> &amp; pixie magic. 
+            %hr
+            %h4 Recommendations:
             %ul
               %li
-                webfonts with
+                web-fonts &#8594;
                 %a{:href => 'http://cufon.shoqolate.com/generate/', :target => '_blank'} Cufon
               %li
-                highlight with
+                code highlighting &#8594;
                 %a{:href => 'http://softwaremaniacs.org/soft/highlight/en/', :target => '_blank'} Highlight
               %li
-                markup with
+                markup &#8594;
                 %a{:href => 'http://haml.hamptoncatlin.com/', :target => '_blank'} Haml
+                &amp;
+                %a{:href => 'http://sass.hamptoncatlin.com/', :target => '_blank'} Sass
               %li
-                javascript with
+                javascript &#8594;
                 %a{:href => 'http://mootools.net', :target => '_blank'} MooTools
         #page-footer
