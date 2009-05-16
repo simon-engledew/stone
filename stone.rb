@@ -113,36 +113,32 @@ end
 
 ROOT = File.expand_path(File.dirname(__FILE__)) unless Object.const_defined?(:ROOT)
 
-module Templates
-  @root = File.join(ROOT, 'templates')
-  @templates = {}
+class EngineHouse
+  def initialize(root, options = {}, &block)
+    @root = root
+    @options = options
+    @block = block || proc {|engine| engine}
+    self.reload!
+  end
   
-  class << self
-    def [](filename)
-      @templates[filename] ||= Stone::Template.new(Stone::EngineFactory.load(File.join(@root, filename)))
-    end
+  def reload!
+    @cache = {}
+  end
+  
+  def [](filename)
+    filename = File.join(@root, filename)
+    @cache[filename] ||= @block.call(Stone::EngineFactory.load(filename, @options))
   end
 end
 
-module Layouts
-  @root = File.join(ROOT, 'layouts')
-  @layouts = {}
-  
-  class << self
-    def [](filename)
-      @layouts[filename] ||= Stone::Layout.new(Stone::EngineFactory.load(File.join(@root, filename)))
-    end
-  end
+Templates = EngineHouse.new(File.join(ROOT, 'templates')) do |engine|
+  Stone::Template.new(engine)
 end
 
-module Stylesheets
-  @root = File.join(ROOT, 'sass')
-  @stylesheets = {}
-  
-  class << self
-    def [](filename)
-      @stylesheets[filename] ||= Stone::EngineFactory.load(File.join(@root, filename), :load_paths => [@root], :style => :expanded)
-    end
-  end
+Layouts = EngineHouse.new(File.join(ROOT, 'layouts')) do |engine|
+  Stone::Layout.new(engine)
 end
+
+Stylesheets = EngineHouse.new(File.join(ROOT, 'sass'), :load_paths => [File.join(ROOT, 'sass')], :style => :expanded)
+
 
