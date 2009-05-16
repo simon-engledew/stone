@@ -22,35 +22,37 @@
           #navigation-content
             %h4 Links
             %dl#links
-              %dt
-                %a{:href => 'http://github.com/toothygoose/'} http://github.com/toothygoose/
+              %dt<
+                %a{:href => 'http://github.com/toothygoose/'}<> http://github.com/toothygoose/
               %dd code
-              %dt
-                %a{:href => 'http://twitter.com/toothygoose/'} http://twitter.com/toothygoose/
+              %dt<
+                %a{:href => 'http://twitter.com/toothygoose/'}<> http://twitter.com/toothygoose/
               %dd distractions
-              %dt
-                %a{:href => 'http://www.toothygoose.com/posts.rss'} http://www.toothygoose.com/posts.rss
+              %dt<
+                %a{:href => 'http://www.toothygoose.com/posts.rss'}<> http://www.toothygoose.com/posts.rss
               %dd feed
             %hr
             %h4 Latest
             %ul#latest-posts
               - Post.all[0...5].each do |post|
-                %li
-                  %a{:href => "/post/#{post.permalink}"}= post.title
+                %li<
+                  %a{:href => "/post/#{post.permalink}"}<>= post.title
             %hr
             %h4 By Month
             %ul#posts-by-date
               - Post.all_by_date.each do |date, posts|
-                %li
-                  %a{:href => "/posts/#{escape(date)}"}= date
-                  %span.count== (#{posts.size})
+                %li<
+                  %a{:href => "/posts/#{escape(date)}"}<>= date
+                  &nbsp;
+                  %span.count>== (#{posts.size})
             %hr
             %h4 By Category
             %ul#posts-by-category
               - Post.all_by_category.each do |category, posts|
-                %li
-                  %a{:href => "/posts/#{escape(category)}"}= category
-                  %span.count== (#{posts.size})
+                %li<
+                  %a{:href => "/posts/#{escape(category)}"}<>= category
+                  &nbsp;
+                  %span.count>== (#{posts.size})
             %hr
             %h4 About
             %p &copy; Simon Engledew 2008.
@@ -58,18 +60,18 @@
             %hr
             %h4 Recommendations:
             %ul
-              %li
-                web-fonts &#8594;
-                %a{:href => 'http://cufon.shoqolate.com/generate/', :target => '_blank'} Cufon
-              %li
-                code highlighting &#8594;
-                %a{:href => 'http://softwaremaniacs.org/soft/highlight/en/', :target => '_blank'} Highlight
-              %li
-                markup &#8594;
-                %a{:href => 'http://haml.hamptoncatlin.com/', :target => '_blank'} Haml
-                &amp;
-                %a{:href => 'http://sass.hamptoncatlin.com/', :target => '_blank'} Sass
-              %li
-                javascript &#8594;
-                %a{:href => 'http://mootools.net', :target => '_blank'} MooTools
+              %li<
+                web-fonts &#8594;&nbsp;
+                %a{:href => 'http://cufon.shoqolate.com/generate/', :target => '_blank'}<> Cufon
+              %li<
+                code highlighting &#8594;&nbsp;
+                %a{:href => 'http://softwaremaniacs.org/soft/highlight/en/', :target => '_blank'}<> Highlight
+              %li<
+                markup &#8594;&nbsp;
+                %a{:href => 'http://haml.hamptoncatlin.com/', :target => '_blank'}<> Haml
+                &nbsp;&amp;&nbsp;
+                %a{:href => 'http://sass.hamptoncatlin.com/', :target => '_blank'}<> Sass
+              %li<
+                javascript &#8594;&nbsp;
+                %a{:href => 'http://mootools.net', :target => '_blank'}<> MooTools
         #page-footer
