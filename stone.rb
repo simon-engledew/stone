@@ -84,6 +84,7 @@ module Stone
     class << self
 
       def load(filename, options = {})
+        $stdout.print ">> Loading engine for #{filename}\n"
         source = File.open(filename, 'r').read
         case extension = File.extname(filename)
           when '.haml' then Haml::Engine.new(source, options)
@@ -114,30 +115,33 @@ ROOT = File.expand_path(File.dirname(__FILE__)) unless Object.const_defined?(:RO
 
 module Templates
   @root = File.join(ROOT, 'templates')
+  @templates = {}
   
   class << self
     def [](filename)
-      Stone::Template.new(Stone::EngineFactory.load(File.join(@root, filename)))
+      @templates[filename] ||= Stone::Template.new(Stone::EngineFactory.load(File.join(@root, filename)))
     end
   end
 end
 
 module Layouts
   @root = File.join(ROOT, 'layouts')
+  @layouts = {}
   
   class << self
     def [](filename)
-      Stone::Layout.new(Stone::EngineFactory.load(File.join(@root, filename)))
+      @layouts[filename] ||= Stone::Layout.new(Stone::EngineFactory.load(File.join(@root, filename)))
     end
   end
 end
 
 module Stylesheets
   @root = File.join(ROOT, 'sass')
+  @stylesheets = {}
   
   class << self
     def [](filename)
-      Stone::EngineFactory.load(File.join(@root, filename), :load_paths => [@root], :style => :expanded)
+      @stylesheets[filename] ||= Stone::EngineFactory.load(File.join(@root, filename), :load_paths => [@root], :style => :expanded)
     end
   end
 end

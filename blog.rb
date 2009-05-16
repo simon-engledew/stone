@@ -3,27 +3,24 @@ require 'sinatra'
 require 'redcloth'
 require 'activesupport'
 
-class Local < Hash
-  def method_missing(method, *args)
-    self[method.to_s] || super
+class Post < Hash
+  def initialize(filename)
+    @permalink = File.basename(filename, File.extname(filename))
+    
+    match = File.open(filename, 'r').read.match(/(.*?)^$(.*)/m)
+    
+    attributes = YAML.load(match[1])
+
+    @content = match[2]
+    @published = attributes['published']
+    @created_at = DateTime.parse(attributes['created_at'])
+    @title = attributes['title']
   end
+  
+  attr_reader :content, :published, :created_at, :title, :permalink
 end
 
-def permalink(filename)
-  File.basename(filename, File.extname(filename))
-end
-
-ordered_posts = Dir.glob(File.join(ROOT, 'posts', '*')).map do |post|
-  if match = File.open(post, 'r').read.match(/(.*?)^$(.*)/m)
-    local = Local.new
-    local.merge!(YAML.load(match[1]))
-    local.merge!('content' => match[2], 'permalink' => permalink(post))
-    local['created_at'] = DateTime.parse(local['created_at'])
-    local
-  else
-    raise "could not parse #{post}"
-  end
-end.sort_by{|post|post.created_at}.reverse
+ordered_posts = Dir.glob(File.join(ROOT, 'posts', '*')).map{|filename|Post.new(filename)}.sort_by{|post|post.created_at}.reverse
 
 posts_by_permalink = ActiveSupport::OrderedHash.new.tap do |posts_by_permalink|
   ordered_posts.each {|post| posts_by_permalink[post.permalink] = post}
