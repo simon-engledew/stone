@@ -82,7 +82,7 @@ get '/' do
 end
 
 get '/post/:permalink' do
-  post = Post.all_by_permalink[params[:permalink]]
+  pass unless post = Post.all_by_permalink[params[:permalink]]
   render('show.haml', globals.merge(:title => post.title, :post => post))
 end
 
@@ -92,7 +92,7 @@ get '/posts.rss' do
 end
 
 get '/posts/:month' do
-  posts = Post.all_by_date[params[:month]] || []
+  pass unless posts = Post.all_by_date[params[:month]]
   render('index.haml', globals.merge(:title => params[:month], :posts => posts))
 end
 
