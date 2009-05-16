@@ -1,0 +1,18 @@
+title: "Historic Routes plugin for Rails"
+published: t
+created_at: 2008-09-20 19:12:54
+
+I've just started weaponizing a Ruby on Rails plugin which keeps track of a users' originating actions using their urls.
+
+
+All you need to do is add a @*history@ parameter to any named route and the plugin handles the rest:
+
+<div class="code"><pre><code class="ruby">map.feedback '*history/feedback'</code></pre></div>
+
+All the state is stored in the URL, and any call to a <code>_url</code> or <code>_path</code> method will automatically validate and inject the current path. This creates a nice looking URL, DRY routes and a path that takes your users out the same way they went in:
+
+<div class="code"><pre><code class="ruby"><%= link_to 'Cancel', previous_path %></code></pre></div>
+
+Head over to the Github project for more information:
+
+"http://github.com/toothygoose/historic-routes":http://github.com/toothygoose/historic-routes

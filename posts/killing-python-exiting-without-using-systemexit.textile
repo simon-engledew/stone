@@ -1,0 +1,13 @@
+title: "Killing Python: Exiting Without Using SystemExit"
+published: t
+created_at: 2009-03-05 16:10:28
+
+Usually in python you exit a script programmatically by raising @SystemExit@ or calling @sys.exit@. Both methods send an exception hurtling up the call stack, allowing every level of your program to execute @finally@ statements and exit cleanly.
+
+This behaviour changes if you throw SystemExit in a multithreaded application: it kills the calling thread instead. If the calling thread is not the main thread the application will just keep ticking along. Fine in most cases, but sometimes you just need to make the application quit.
+
+To achieve this, you need to call:
+
+<div class="code"><pre><code class="python">os._exit()</code></pre></div>
+
+with an error code of your choice.

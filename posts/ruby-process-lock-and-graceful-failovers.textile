@@ -1,0 +1,14 @@
+title: "Ruby Process Lock and graceful failovers"
+published: t
+created_at: 2008-10-29 16:39:02
+
+If you are running several thin or mongrel instances it can be useful to designate one as master and the others as slaves -- say for a backup task that only really needs to run once per machine.
+
+A nice way of doing it is with a process lock.
+
+When a server starts it tries to grab a file lock and write its process ID. The first server to do so becomes the master process. You can tell if the owner of the process lock is still alive and kicking by sending it a kill signal of 0 (UNIX only). If it's dead, the first server to notice grabs the lock and gets promoted.
+
+As always the code to wrap this up into a nice Ruby object is up on GitHub at:
+
+"http://github.com/toothygoose/ruby-process-lock":http://github.com/toothygoose/ruby-process-lock
+

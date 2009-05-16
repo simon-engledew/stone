@@ -1,0 +1,52 @@
+title: "Rails 2.2 Templates"
+published: t
+created_at: 2009-02-01 17:48:26
+
+TemplateHandlers have been significantly overhauled in Rails 2.2, and these changes are not backwards-compatible with Rails 2.1.
+
+Instead of being responsible for rendering a template, TemplateHandlers should now provide a string of Ruby that will be eval'ed by ActionView further along the rendering chain.
+
+So, where previously a @TemplateHandler@ might declared a *render* method:
+
+<div class="code"><pre><code class="ruby">class DotHandler < ActionView::TemplateHandlers::ERB
+
+  def render(template, local_assigns = {})
+    @view.controller.headers["Content-Type"] ||= 'image/png'
+
+    input = super(template)
+
+    output = IO.popen('dot -Tpng', 'r+') do |io|
+      io.write(input)
+      io.close_write
+      io.read
+    end
+
+    output
+  end
+end
+
+ActionView::Template::register_template_handler 'dot', DotHandler
+ActionController::Base.exempt_from_layout :dot</code></pre></div>
+
+Templates should now provide a *compile* method that will return ruby code for execution later:
+
+<div class="code"><pre><code class="ruby">class DotHandler < ActionView::TemplateHandler
+
+  def compile(path)
+    <<-EOS
+      controller.response.content_type ||= Mime::PNG
+      #{ActionView::Template.handler_class_for_extension('erb').call(path)}
+      @output_buffer = IO.popen("dot -Tpng", 'r+') do |io|
+      io.write(@output_buffer)
+      io.close_write
+      io.read
+      end
+    EOS
+  end
+
+end
+
+ActionView::Template.register_template_handler 'dot', DotHandler
+ActionView::Base.exempt_from_layout 'dot'</code></pre></div>
+
+To chain template handlers, find the appropriate handler with @ActionView::Template#handler_class_for_extension@ and then call it. The code it returns can then be injected into your compiled template.

@@ -1,0 +1,8 @@
+title: "MySQL Remote Database Transfers"
+published: t
+created_at: 2009-03-09 13:53:03
+
+One-liner to remote copy a MySQL database over SSH:
+<div class="code"><pre><code>mysqldump [db] | ssh -C [host] 'mysql [db]'</code></pre></div>
+
+For anything more complicated there is also "taps":http://adam.blog.heroku.com/past/2009/2/11/taps_for_easy_database_transfers/.

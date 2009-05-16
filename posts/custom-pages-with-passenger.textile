@@ -1,0 +1,13 @@
+title: "Custom 404 Pages with Passenger"
+published: t
+created_at: 2008-12-11 09:53:28
+
+On failing to match a route, Rails 2.1.2 appears to rescue the @ActionController::RoutingError@ with its stock template (@/action_controller/templates/rescues/layout.erb@) and then returns an upstream 404 error code -- even if you've defined a custom @rescue_from@ in @ActionController@:
+
+<div class="code"><pre><code class="ruby">rescue_from ActionController::RoutingError, :with => :render_404</code></pre></div>
+
+With your Mongrel/Thin and Apache/Nginx combo this is fine; you can intercept the error code and redirect your visitor to the appropriate custom error page. With Passenger (mod_rails) however, there is no such intermediary step. 404 error messages that do not match a controller will just generate a blank page.
+
+To address this problem, the best solution I have found is to add a final catch-all route at the bottom of your @routes.rb@ file that invokes your @rescue_from@ method directly:
+
+<div class="code"><pre><code class="ruby">map.connect '*path', :controller => 'home', :action => 'render_404'</code></pre></div>

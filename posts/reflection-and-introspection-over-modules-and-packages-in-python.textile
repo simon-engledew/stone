@@ -1,0 +1,53 @@
+title: "Reflection and Introspection Over Modules and Packages In Python"
+published: t
+created_at: 2009-03-06 11:39:28
+
+Someone Twitter me if I'm missing something, but I couldn't find a core way of doing reflection over packages in Python.
+In this particular case, I wanted a way to load all the modules in a certain package (a directory with an @__init__.py@) and automatically add them into a running Twisted service.
+
+To get this working, I created a small module called reflection:
+
+<div class="code"><pre><code class="python">import os
+import sys
+import re
+
+'turns a lower case string with underscores into its camel case equivalent'
+def camelize(string):
+    return re.sub(r"(?:^|_)(.)", lambda x: x.group(0)[-1].upper(), string)
+
+'returns a list of modules objects in the package identified by package_name'
+def dir_modules(package_name):
+    modules = []
+    load_package(modules.append, package_name)
+    return modules
+
+'load the specified class from module, or return the default class derived from module.__name__ if no class_name is specified'
+def load_class(module, class_name = None):
+    return getattr(__import__(module) if module.__class__ == str else module, class_name or camelize(module.__name__.split('.')[-1]))
+
+def load_package(function, package_name):
+    os.path.walk(package_name, load_modules, function)
+
+def load_modules(function, package_name, module_names):
+    for module_name in module_names:
+        if re.match(r"^(?!__)\w*\.py$", module_name):
+            qualified_module_name = '%s.%s' % (package_name, module_name[0:-3])
+            __import__(qualified_module_name)
+            function(sys.modules[qualified_module_name])</code></pre></div>
+
+My Twisted application then uses this code in its initializer:
+
+<div class="code"><pre><code class="python">xmlrpc.XMLRPC.__init__(self)
+xmlrpc.addIntrospection(self)
+for module in reflection.dir_modules('services'):
+    klass = reflection.load_class(module)
+    if issubclass(klass, xmlrpc.XMLRPC):
+        print 'adding xmlrpc sub handler from %s' % module.__name__
+        self.putSubHandler(module.__name__.split('.')[-1], klass())
+    elif issubclass(klass, internet.TimerService):
+        print 'initalizing timer service from %s' % module.__name__
+        instance = klass(Application.Config[module.__name__.split('.')[-1]]['interval'])
+        instance.setServiceParent(Service.Application)
+        instance.startService()</code></pre></div>
+
+Now you can drop new modules into the services directory and, provided they are named correctly, they will be auto-loaded into the application on restart.

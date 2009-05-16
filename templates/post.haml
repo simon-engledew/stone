@@ -1,0 +1,7 @@
+.post
+  %h4
+    %a{:href => "/post/#{@post.permalink}"}= @post.title
+  %p.created_at== #{ordinalize @post.created_at.strftime('%d').to_i} #{@post.created_at.strftime('%B %Y')}
+  .content
+    :textile
+      #{@post.content}

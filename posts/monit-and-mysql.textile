@@ -1,0 +1,21 @@
+title: "Monit and MySQL"
+published: t
+created_at: 2008-12-15 21:19:09
+
+Usually Monit will be happy to watch MySQL with the following configuration:
+
+<div class="code"><pre><code>check process mysqld with pidfile "/var/run/mysqld/mysqld.pid"
+  group database
+    start program = "/etc/init.d/mysql start"
+    stop program = "/etc/init.d/mysql stop"
+    if cpu > 60% for 2 cycles then alert
+    if cpu > 80% for 10 cycles then restart
+    if failed port 3306 protocol mysql then restart</code></pre></div>
+
+If you are getting connection refused errors, your MySQL database may not be bound to @localhost@. Check your bind address in @/etc/mysql/my.cnf@:
+
+<div class="code"><pre><code>bind-address = 0.0.0.0</code></pre></div>
+
+If the address MySQL is bound to is external, you will need to adjust your @monitrc@ accordingly:
+
+<div class="code"><pre><code>if failed host 0.0.0.0 port 3306 protocol mysql then restart</code></pre></div>

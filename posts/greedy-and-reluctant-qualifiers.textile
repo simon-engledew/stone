@@ -1,0 +1,21 @@
+title: "Greedy and Reluctant Qualifiers"
+published: t
+created_at: 2009-05-15 08:52:03
+
+A common gotcha when using regular expressions occurs when using the (greedy) qualifiers + ? and *. These qualifiers will attempt to make the longest match they possibly can.
+
+The regular expression:
+
+<div class="code"><pre><code>/'(.*)'/</code></pre></div>
+
+will successfully match and group the word <code>there</code> in <code>hello 'there'</code>, but will actually run on to the last single quote in the string <code>hello 'there' how are 'you'</code>, matching <code>there' how are 'you</code>.
+
+One solution is to restrict the set of characters you are searching for with the greedy qualifier, thus ensuring the match will finish before hitting the terminating character:
+
+<div class="code"><pre><code>/'([^']*)'/</code></pre></div>
+
+In my opinion however, the more readable option is to turn the greedy qualifier into a _reluctant_ one:
+
+<div class="code"><pre><code>/'(.*?)'/</code></pre></div>
+
+By adding a ? to the qualifier the expression will try to match the minimum string that satisfies the expression.

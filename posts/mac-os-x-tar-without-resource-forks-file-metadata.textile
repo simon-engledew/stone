@@ -1,0 +1,9 @@
+title: "Mac OS X: Tar without resource forks & file metadata"
+published: t
+created_at: 2008-10-08 12:51:47
+
+You can stop @Tar@ from archiving the <code>._</code> files that Mac OS uses to mark up its file system with an undocumented environment variable:
+
+<div class="code"><pre><code>export COPYFILE_DISABLE=true</code></pre></div>
+
+Thanks "Norman Walsh":http://norman.walsh.name/2008/02/22/tar

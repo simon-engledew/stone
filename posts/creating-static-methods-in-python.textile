@@ -1,0 +1,30 @@
+title: "Creating Static Methods in Python"
+published: t
+created_at: 2009-02-13 15:59:22
+
+Static methods can be a little confusing if you come to Python from other languages in which they are first class citizens. To create a static method you need to pass an existing method through @staticmethod()@:
+
+<div class="code"><pre><code class="python">class Person:
+  people = {}
+  def __init__(self, name):
+    self.name = name
+    Person.people[self.name] = self
+
+  def find_by_name(name):
+    return Person.people.get(name)
+
+  find_by_name = staticmethod(find_by_name)</code></pre></div>
+
+This will do all the hokey Python magic to (I assume) bind the method correctly into the Class's lookup @__dict__@. 
+
+Thankfully, newer versions of Python -- including 2.5.1, the version which ships with Leopard -- allow you to use the slightly more aesthetically pleasing decorator shortcut:
+
+<div class="code"><pre><code>class Person:
+  people = {}
+  def __init__(self, name):
+    self.name = name
+    Person.people[self.name] = self
+
+  @staticmethod
+  def find_by_name(name):
+    return Person.people.get(name)</code></pre></div>

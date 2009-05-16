@@ -1,0 +1,56 @@
+!!!Strict
+%html
+  %head
+    %title== Toothygoose - #{@title || 'Untitled'}
+    %link{:href => '/stylesheets/application.css', :media => 'screen', :rel => 'stylesheet', :type => 'text/css'}
+    != yield :head
+  %body
+    #header-container
+      #header<
+        %h1<
+          %a{:href => '/'}<
+            %span Eldritch nomenclature, conjoured for arcane contraptions to execute unerringly.
+    #page-container
+      #page
+        #page-content
+          != yield
+          - unless @request.fullpath == '/'
+            %a{:href => '/'} Home
+          #page_content-footer
+        #navigation
+          #navigation-content
+            %h4 Links
+            %dl#links
+              %dt
+                %a{:href => 'http://github.com/toothygoose/'} http://github.com/toothygoose/
+              %dd code
+              %dt
+                %a{:href => 'http://twitter.com/toothygoose/'} http://twitter.com/toothygoose/
+              %dd distractions
+              %dt
+                %a{:href => 'http://www.toothygoose.com/posts.rss'} http://www.toothygoose.com/posts.rss
+              %dd feed
+            %hr
+            %h4 Months
+            %ul#posts-by-date
+              - @posts_by_date.keys.each do |time|
+                %li
+                  %a{:href => "/posts/#{escape(time)}"}= time
+            %hr
+            %h4 About
+            %p &copy; Simon Engledew 2008.
+            %p Powered by Sinatra &amp; faerie-dust. 
+            %ul
+              %li
+                webfonts with
+                %a{:href => 'http://cufon.shoqolate.com/generate/', :target => '_blank'} Cufon
+              %li
+                highligh with
+                %a{:href => 'http://softwaremaniacs.org/soft/highlight/en/', :target => '_blank'} Highlight
+              %li
+                markup with
+                %a{:href => 'http://haml.hamptoncatlin.com/', :target => '_blank'} Haml
+              %li
+                javascript with
+                %a{:href => 'http://mootools.net', :target => '_blank'} MooTools
+        #page-footer

@@ -1,0 +1,17 @@
+title: "Dynamically generated classes"
+published: t
+created_at: 2008-12-14 22:11:45
+
+To create a class with a dynamic name in Ruby, create a new @Class@ object and then set it as a constant within @Object@:
+
+<div class="code"><pre><code>Object.const_set('ChunkyBacon', Class.new)
+=> ChunkyBacon
+>> ChunkyBacon.new
+=> #<ChunkyBacon:0x5ef740></code></pre></div>
+
+You can use this to good effect with @ActiveResource@, creating arbitrary restful resources as you go:
+
+<div class="code"><pre><code>Object.const_set(model, Class.new(ActiveResource::Base))
+@class = model.constantize
+@class.site = site
+@class.new.save</code></pre></div>

@@ -1,0 +1,15 @@
+title: "Memoization In Javascript"
+published: t
+created_at: 2008-11-05 16:46:19
+
+<div class="code"><pre><code>function memoize(f) {
+  return function () {
+      var args = Array.prototype.slice.call(arguments);
+      f.memoized = f.memoized || {};
+      return (args in f.memoized) ?
+        f.memoized[args] :
+        f.memoized[args] = f.apply(this, args);
+  };
+}</code></pre></div>
+
+"http://blog.thejit.org/":http://blog.thejit.org/
