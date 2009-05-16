@@ -31,15 +31,16 @@
               %dt
                 %a{:href => 'http://www.toothygoose.com/posts.rss'} http://www.toothygoose.com/posts.rss
               %dd feed
+            %hr
             %h4 Latest
             %ul#latest-posts
-              - @posts[0..10].each do |post|
+              - Post.all[0...5].each do |post|
                 %li
                   %a{:href => "/post/#{post.permalink}"}= post.title
             %hr
             %h4 By Month
             %ul#posts-by-date
-              - @posts_by_date.each do |date, posts|
+              - Post.all_by_date.each do |date, posts|
                 %li
                   %a{:href => "/posts/#{escape(date)}"}= date
                   %span.count== (#{posts.size})

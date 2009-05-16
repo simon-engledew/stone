@@ -63,11 +63,6 @@ before do
   end
 end
 
-globals = {
-  'posts_by_permalink' => Post.all_by_permalink,
-  'posts_by_date' => Post.all_by_date
-}
-
 helpers do
   def render(filename, locals = {}, options = {:layout => true})
     locals = locals.merge(:request => request)
@@ -78,22 +73,22 @@ end
 application_layout = Layouts['application.haml']
 
 get '/' do
-  render('index.haml', globals.merge(:title => 'Home', :posts => Post.all))
+  render('index.haml', :title => 'Home', :posts => Post.all)
 end
 
 get '/post/:permalink' do
   pass unless post = Post.all_by_permalink[params[:permalink]]
-  render('show.haml', globals.merge(:title => post.title, :post => post))
+  render('show.haml', :title => post.title, :post => post)
 end
 
 get '/posts.rss' do                                                                                  
   content_type 'application/rss+xml', :charset => 'utf-8'
-  render('index.builder', globals.merge(:posts => Post.all), :layout => false)
+  render('index.builder', {:posts => Post.all}, :layout => false)
 end
 
 get '/posts/:month' do
   pass unless posts = Post.all_by_date[params[:month]]
-  render('index.haml', globals.merge(:title => params[:month], :posts => posts))
+  render('index.haml', :title => params[:month], :posts => posts)
 end
 
 get '/stylesheets/application.css' do
