@@ -48,6 +48,6 @@ Templates should now provide a *compile* method that will return ruby code for e
 end
 
 ActionView::Template.register_template_handler 'dot', DotHandler
-ActionView::Base.exempt_from_layout 'dot'</code></pre></div>
+ActionView::Template.exempt_from_layout 'dot'</code></pre></div>
 
 To chain template handlers, find the appropriate handler with @ActionView::Template#handler_class_for_extension@ and then call it. The code it returns can then be injected into your compiled template.

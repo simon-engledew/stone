@@ -1,3 +1,5 @@
+- unless @request.fullpath == '/'
+  %h3= @title
 #posts
   - @posts.each do |post|
     - if post.published

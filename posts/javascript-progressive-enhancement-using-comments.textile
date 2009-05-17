@@ -5,13 +5,11 @@ created_at: 2009-04-28 14:46:20
 
 Most methods of progressive enhancement involve setting various DOM elements to display:none and then making them visible from JavaScript, or building new document nodes and inserting them.
 
-In the former case you end up with lots of brittle snippets of code for traversing the DOM and toggling elements.
-
-In the later case, you often end up having to write code twice: Once in your web application, and once in the JavaScript which enhances your code.
+In the former case you end up with lots of brittle snippets of code for traversing the DOM and toggling elements. In the later case you often end up having to write the same markup twice: Once in your web application, and once in the JavaScript which enhances your code.
 
 I recently read a <a href="http://james.padolsey.com/javascript/introducing-jshtml/">blog post by James Padolsey</a> that suggested creating comment nodes with HTML inside and then promoting their contents to real nodes within their parent elements. Neat.
 
-The comments for this article on Hacker News quickly moved to performance however: As you can't natively scour the DOM for comments it is necessary to iterate over every DOM element from JavaScript, checking its type and manipulating it if applicable. An expensive business.
+The comments for this article on Hacker News quickly moved to performance however: As you can't natively scour the DOM for comments, it is necessary to iterate over every DOM element from JavaScript - checking its type and manipulating it if applicable. An expensive business.
 
 If performance really is an issue, but you like the idea of baking your HTML directly into the page as comments, you can replace the DOM traversal with an atomic regular expression replace and an innerHTML assignment. Both of these operations occur in the underlying DOM implementation and are run at native speeds:
 

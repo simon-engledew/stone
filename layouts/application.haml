@@ -43,7 +43,7 @@
               - Post.all_by_date.each do |date, posts|
                 %li<
                   %a{:href => "/posts/#{escape(date)}"}<>= date
-                  &nbsp;
+                  &#x000A;
                   %span.count>== (#{posts.size})
             %hr
             %h4 By Category
@@ -51,27 +51,28 @@
               - Post.all_by_category.each do |category, posts|
                 %li<
                   %a{:href => "/posts/#{escape(category)}"}<>= category
-                  &nbsp;
+                  &#x000A;
                   %span.count>== (#{posts.size})
             %hr
             %h4 About
-            %p &copy; Simon Engledew 2008.
-            %p Powered by Sinatra, <a href="http://github.com/toothygoose/stone">Stone</a> &amp; pixie magic. 
+            %ul
+              %li Powered by Sinatra, <a href="http://github.com/toothygoose/stone">Stone</a> &amp; pixie magic. 
+              %li &copy; Simon Engledew 2008.
             %hr
-            %h4 Recommendations:
+            %h4 Recommendations
             %ul
               %li<
-                web-fonts &#8594;&nbsp;
+                web-fonts &#8594;&#x000A;
                 %a{:href => 'http://cufon.shoqolate.com/generate/', :target => '_blank'}<> Cufon
               %li<
-                code highlighting &#8594;&nbsp;
+                code highlighting &#8594;&#x000A;
                 %a{:href => 'http://softwaremaniacs.org/soft/highlight/en/', :target => '_blank'}<> Highlight
               %li<
-                markup &#8594;&nbsp;
+                markup &#8594;&#x000A;
                 %a{:href => 'http://haml.hamptoncatlin.com/', :target => '_blank'}<> Haml
-                &nbsp;&amp;&nbsp;
+                &#x000A;&amp;&#x000A;
                 %a{:href => 'http://sass.hamptoncatlin.com/', :target => '_blank'}<> Sass
               %li<
-                javascript &#8594;&nbsp;
+                javascript &#8594;&#x000A;
                 %a{:href => 'http://mootools.net', :target => '_blank'}<> MooTools
         #page-footer

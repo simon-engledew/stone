@@ -3,7 +3,7 @@ published: t
 category: tricks
 created_at: 2009-05-15 08:52:03
 
-A common gotcha when using regular expressions occurs when using the (greedy) qualifiers + ? and *. These qualifiers will attempt to make the longest match they possibly can.
+A common gotcha when using regular expressions occurs when using the default (greedy) qualifiers + ? and *. These qualifiers will attempt to make the longest match they possibly can.
 
 The regular expression:
 
@@ -15,7 +15,7 @@ One solution is to restrict the set of characters you are searching for with the
 
 <div class="code"><pre><code>/'([^']*)'/</code></pre></div>
 
-In my opinion however, the more readable option is to turn the greedy qualifier into a _reluctant_ one:
+This works, but the more readable option is to turn the greedy qualifier into a _reluctant_ one:
 
 <div class="code"><pre><code>/'(.*?)'/</code></pre></div>
 
