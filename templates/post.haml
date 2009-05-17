@@ -1,7 +1,11 @@
 .post
   %h4<
     %a{:href => "/post/#{@post.permalink}"}<>= @post.title
-  %p.created_at== #{ordinalize @post.created_at.strftime('%d').to_i} #{@post.created_at.strftime('%B %Y')}
-  .content
-    :textile
-      #{@post.content}
+  - month = @post.created_at.strftime('%B %Y')
+  %p.metadata<
+    posted&#x000A;
+    %span.created_at>== #{ordinalize @post.created_at.strftime('%d').to_i} <a href="/posts/#{escape month}">#{month}</a>
+    &#x000A;in&#x000A;
+    %span.category>
+      %a{:href => "/posts/#{escape @post.category}"}<>= @post.category
+  .content~ @post.content

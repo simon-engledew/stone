@@ -11,7 +11,7 @@ class Post
     
     attributes = YAML.load(match[1])
 
-    @content = match[2]
+    @content = RedCloth.new(match[2]).to_html
     @category = attributes['category']
     @published = attributes['published']
     @created_at = DateTime.parse(attributes['created_at'])

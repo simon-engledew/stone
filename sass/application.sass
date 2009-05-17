@@ -4,12 +4,11 @@
 
 !gutter = 3em
 
+html
+  :background-color #eee
+
 body
   :padding = !gutter
-
-#header
-  :margin-bottom 3em
-  :letter-spacing -0.1ex
 
 #page
   :width 65em
@@ -46,19 +45,31 @@ h1, p, ul, .code
     :text-align justify
 
 h1, h2, h3, h4, h5, h6
+  :font-family 'Helvetica Neue', Helvetica
   :font-weight bold
   a
     :color #111
+    :text-decoration none
 
 a
   :color #383
 
-h1
-  :font-size 150%
+#header
+  :margin-bottom 3em
+  h1
+    :letter-spacing -0.05ex
+    :font-size 180%
+    :font-weight normal
+    a
+      :text-decoration none
   
 h4
   :margin-bottom 0.5em
   :font-size 110%
+  :text-transform uppercase
+  :font-weight normal
+  a
+    :text-decoration none
 
 .code
   :padding 1em
