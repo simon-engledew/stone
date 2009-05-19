@@ -4,7 +4,6 @@
     %title== Simon Engledew - #{@title || 'Untitled'}
     %link{:href => '/stylesheets/application.css', :media => 'screen', :rel => 'stylesheet', :type => 'text/css'}
     %link{:href => '/posts.rss', :rel => :alternate, :type => 'application/rss+xml', :title => 'RSS Feed'}
-    %link{:href => "http://blog.engledew.com#{@request.fullpath}", :rel => 'canonical'}
     != yield :head
   %body
     #header-container
