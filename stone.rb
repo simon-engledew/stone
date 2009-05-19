@@ -7,24 +7,28 @@ require 'yaml'
 require 'builder'
 
 module Stone
-  module Helpers
-    def ordinalize(number)
-      if (11..13).include?(number.to_i % 100)
-        "#{number}th"
-      else
-        case number.to_i % 10
-          when 1 then "#{number}st"
-          when 2 then "#{number}nd"
-          when 3 then "#{number}rd"
-          else "#{number}th"
-        end
-      end
+  class Cache
+    def initialize
+      @cache = {}
     end
 
-    def escape(s)
-      s.to_s.gsub(/([^ a-zA-Z0-9_.-]+)/n) {
-        '%'+$1.unpack('H2'*$1.size).join('%').upcase
-      }.tr(' ', '+')
+    def read(*key, &block)
+      if (value = self[*key]).nil? and block_given?
+        return (self[*key] = block.call)
+      end
+      return value
+    end
+
+    def [](*args)
+      @cache[Marshal.dump(args)]
+    end
+
+    def []=(*args)
+      @cache[Marshal.dump(args[0..-2])] = args[-1]
+    end
+    
+    def reset!
+      @cache = {}
     end
   end
   
@@ -36,25 +40,19 @@ module Stone
       @bound_content = bound_content
     end
     
-    include Helpers
-  
     def render
       proc do
         (globals.merge(locals)).
           map{|key, value|[:"@#{key}", value]}.
           reject{|key, value|instance_variable_defined? key}.
           each{|key, value|instance_variable_set(key, value)}
-      
+
         engine.render(binding) do |*args|
           bound_content[(args.first || :yield).to_sym]
         end
       end.call
-    end
-  
-    def template(filename, locals = {})
-      Templates[filename].render(self.locals.merge(locals), globals, bound_content)
-    end
-  
+    end  
+    
     def content_for(identifier, &block)
       @bound_content[identifier.to_sym] ||= []
       @bound_content[identifier.to_sym] << capture_haml(&block)
@@ -81,9 +79,12 @@ module Stone
   end
 
   module EngineFactory
+    # @cache = Cache.new
+    
     class << self
-
+      
       def load(filename, options = {})
+        
         source = File.open(filename, 'r').read
         case extension = File.extname(filename)
           when '.haml' then Haml::Engine.new(source, options)
@@ -92,6 +93,13 @@ module Stone
           else raise 'unknown engine extension: #{extension}'
         end
       end
+      
+      # process_method = instance_method(:load)
+      # define_method :load do |*args|
+      #   @cache.read(args) do 
+      #     process_method.bind(self).call(*args)
+      #   end
+      # end
 
     end
   end
@@ -113,7 +121,7 @@ module Stone
       @cache[filename] ||= @block.call(Stone::EngineFactory.load(filename, @options))
     end
   end
-  
+
   class BuilderEngine
     def initialize(source, options)
       @source = source
@@ -127,16 +135,3 @@ module Stone
     attr_reader :source, :options
   end
 end
-
-ROOT = File.dirname(__FILE__) unless Object.const_defined?(:ROOT)
-
-Templates = Stone::EngineHouse.new(File.join(ROOT, 'templates')) do |engine|
-  Stone::Template.new(engine)
-end
-Layouts = Stone::EngineHouse.new(File.join(ROOT, 'layouts')) do |engine|
-  Stone::Layout.new(engine)
-end
-Stylesheets = Stone::EngineHouse.new(File.join(ROOT, 'sass'),
-  :load_paths => [File.join(ROOT, 'sass')],
-  :style => ENV['RACK_ENV'] == 'development' ? :expanded : :compressed
-)

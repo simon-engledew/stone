@@ -3,6 +3,45 @@ require 'sinatra'
 require 'redcloth'
 require 'activesupport'
 
+ROOT = File.dirname(__FILE__) unless Object.const_defined?(:ROOT)
+
+Templates = Stone::EngineHouse.new(File.join(ROOT, 'templates')) do |engine|
+  Stone::Template.new(engine)
+end
+Layouts = Stone::EngineHouse.new(File.join(ROOT, 'layouts')) do |engine|
+  Stone::Layout.new(engine)
+end
+Stylesheets = Stone::EngineHouse.new(File.join(ROOT, 'sass'), :load_paths => [File.join(ROOT, 'sass')], :style => ENV['RACK_ENV'] == 'development' ? :expanded : :compressed)
+
+module Helpers
+  def ordinalize(number)
+    if (11..13).include?(number.to_i % 100)
+      "#{number}th"
+    else
+      case number.to_i % 10
+        when 1 then "#{number}st"
+        when 2 then "#{number}nd"
+        when 3 then "#{number}rd"
+        else "#{number}th"
+      end
+    end
+  end
+  
+  def template(filename, locals = {})
+    Templates[filename].render(self.locals.merge(locals), globals, bound_content)
+  end
+
+  def escape(s)
+    s.to_s.gsub(/([^ a-zA-Z0-9_.-]+)/n) {
+      '%'+$1.unpack('H2'*$1.size).join('%').upcase
+    }.tr(' ', '+')
+  end
+end
+
+class Stone::Renderer
+  include(Helpers)
+end
+
 class Post
   def initialize(filename)
     @permalink = File.basename(filename, File.extname(filename))
