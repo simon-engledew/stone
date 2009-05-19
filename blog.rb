@@ -1,17 +1,60 @@
-require 'stone'
-require 'sinatra'
-require 'redcloth'
+require 'rubygems'
 require 'activesupport'
 
-ROOT = File.dirname(__FILE__) unless Object.const_defined?(:ROOT)
+require 'stone'
 
-Templates = Stone::EngineHouse.new(File.join(ROOT, 'templates')) do |engine|
-  Stone::Template.new(engine)
+require 'sinatra'
+require 'redcloth'
+require 'models/post'
+
+ROOT = File.expand_path(File.join(File.dirname(__FILE__))) unless Object.const_defined?(:ROOT)
+STYLESHEETS_ROOT = File.join(ROOT, 'sass') unless Object.const_defined?(:SASS_ROOT)
+TEMPLATES_ROOT = File.join(ROOT, 'templates') unless Object.const_defined?(:TEMPLATES_ROOT)
+LAYOUTS_ROOT = File.join(ROOT, 'layouts') unless Object.const_defined?(:LAYOUTS_ROOT)
+
+module EngineFactory
+    # @cache = Cache.new
+  class << self
+    def load(filename)
+      source = File.open(filename, 'r').read
+      case extension = File.extname(filename)[1..-1]
+        when 'haml' then Haml::Engine.new(source)
+        when 'sass' then Sass::Engine.new(source, :load_paths => [STYLESHEETS_ROOT], :style => ENV['RACK_ENV'] == 'development' ? :expanded : :compressed)
+        when 'builder' then Stone::BuilderEngine.new(source, :indent => 2)
+        else raise 'unknown engine extension: #{extension}'
+      end
+    end
+    
+      # process_method = instance_method(:load)
+      # define_method :load do |*args|
+      #   @cache.read(args) do 
+      #     process_method.bind(self).call(*args)
+      #   end
+      # end
+  end
 end
-Layouts = Stone::EngineHouse.new(File.join(ROOT, 'layouts')) do |engine|
-  Stone::Layout.new(engine)
+
+class EngineHouse
+  def initialize(root, &block)
+    @root = root
+    @cache = {}
+    @block = block || proc {|engine| engine}
+    self.reload!
+  end
+
+  def reload!
+    @cache = {}
+  end
+
+  def [](filename)
+    filename = File.join(@root, filename)
+    @cache[filename] ||= @block.call(EngineFactory.load(filename))
+  end
 end
-Stylesheets = Stone::EngineHouse.new(File.join(ROOT, 'sass'), :load_paths => [File.join(ROOT, 'sass')], :style => ENV['RACK_ENV'] == 'development' ? :expanded : :compressed)
+
+Templates = EngineHouse.new(TEMPLATES_ROOT) {|engine| Stone::Template.new(engine)}
+Layouts = EngineHouse.new(LAYOUTS_ROOT) {|engine| Stone::Layout.new(engine)}
+Stylesheets = EngineHouse.new(STYLESHEETS_ROOT)
 
 module Helpers
   def ordinalize(number)
@@ -26,7 +69,7 @@ module Helpers
       end
     end
   end
-  
+
   def template(filename, locals = {})
     Templates[filename].render(self.locals.merge(locals), self.globals, self.bound_content)
   end
@@ -42,63 +85,8 @@ class Stone::Renderer
   include(Helpers)
 end
 
-class Post
-  def initialize(filename)
-    @permalink = File.basename(filename, File.extname(filename))
-    
-    match = File.open(filename, 'r').read.match(/(.*?)^$(.*)/m)
-    
-    attributes = YAML.load(match[1])
-
-    @content = RedCloth.new(match[2]).to_html
-    @category = attributes['category']
-    @published = attributes['published']
-    @created_at = DateTime.parse(attributes['created_at'])
-    @title = attributes['title']
-  end
-  
-  class << self
-    def all
-      @cache[:all] ||= Dir.glob(File.join(ROOT, 'posts', '*')).map{|filename|Post.new(filename)}.sort_by{|post|post.created_at}.reverse
-    end
-  
-    def all_by_date
-      @cache[:all_by_date] ||= ActiveSupport::OrderedHash.new.tap do |all_by_date|
-        Post.all.each do |post|
-          month = post.created_at.strftime('%B %Y')
-          all_by_date[month] ||= []
-          all_by_date[month] << post
-        end
-      end
-    end
-  
-    def all_by_permalink
-      @cache[:all_by_permalink] ||= ActiveSupport::OrderedHash.new.tap do |hash|
-        Post.all.each {|post| hash[post.permalink] = post}
-      end
-    end
-    
-    def all_by_category
-      @cache[:all_by_category] ||= ActiveSupport::OrderedHash.new.tap do |hash|
-        Post.all.each do |post|
-          hash[post.category] ||= []
-          hash[post.category] << post
-        end
-      end
-    end
-    
-    def reload!
-      @cache = {}
-    end
-  end
-  
-  Post.reload!
-  
-  attr_reader :content, :published, :created_at, :title, :permalink, :category
-end
-
 before do
-  if ENV['RACK_ENV'] == 'development'
+  unless ENV['RACK_ENV'] == 'production'
     Templates.reload!
     Layouts.reload!
     Stylesheets.reload!
@@ -108,12 +96,10 @@ end
 
 helpers do
   def render(filename, locals = {}, options = {:layout => true})
-    locals = locals.merge(:request => request)
+    locals = locals.reverse_merge(:request => request)
     options[:layout] ? Layouts['application.haml'].render(Templates[filename], locals) : Templates[filename].render(locals)
   end
 end
-
-application_layout = Layouts['application.haml']
 
 get '/' do
   render('index.haml', :title => 'Home', :posts => Post.all)
@@ -124,11 +110,6 @@ get '/post/:permalink' do
   render('show.haml', :title => post.title, :post => post)
 end
 
-get '/posts.rss' do                                                                                  
-  content_type 'application/rss+xml', :charset => 'utf-8'
-  render('index.builder', {:posts => Post.all}, :layout => false)
-end
-
 get '/posts/:month' do
   pass unless posts = Post.all_by_date[params[:month]]
   render('index.haml', :title => params[:month], :posts => posts)
@@ -137,6 +118,11 @@ end
 get '/posts/:category' do
   pass unless posts = Post.all_by_category[params[:category]]
   render('index.haml', :title => params[:category], :posts => posts)
+end
+
+get '/posts.rss' do                                                                                  
+  content_type 'application/rss+xml', :charset => 'utf-8'
+  render('index.builder', {:posts => Post.all}, :layout => false)
 end
 
 get '/stylesheets/application.css' do

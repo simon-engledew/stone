@@ -78,60 +78,14 @@ module Stone
     end
   end
 
-  module EngineFactory
-    # @cache = Cache.new
-    
-    class << self
-      
-      def load(filename, options = {})
-        
-        source = File.open(filename, 'r').read
-        case extension = File.extname(filename)
-          when '.haml' then Haml::Engine.new(source, options)
-          when '.sass' then Sass::Engine.new(source, options)
-          when '.builder' then Stone::BuilderEngine.new(source, options)
-          else raise 'unknown engine extension: #{extension}'
-        end
-      end
-      
-      # process_method = instance_method(:load)
-      # define_method :load do |*args|
-      #   @cache.read(args) do 
-      #     process_method.bind(self).call(*args)
-      #   end
-      # end
-
-    end
-  end
-  
-  class EngineHouse
-    def initialize(root, options = {}, &block)
-      @root = root
-      @options = options
-      @block = block || proc {|engine| engine}
-      self.reload!
-    end
-
-    def reload!
-      @cache = {}
-    end
-
-    def [](filename)
-      filename = File.join(@root, filename)
-      @cache[filename] ||= @block.call(Stone::EngineFactory.load(filename, @options))
-    end
-  end
-
   class BuilderEngine
     def initialize(source, options)
       @source = source
-      @options = options
+      @xml = Builder::XmlMarkup.new(options)
     end
     
     def render(binding = binding)
-      eval("xml = Builder::XmlMarkup.new(:indent => 2);#{source};xml.to_s", binding)
+      eval("lambda { |xml| #{@source} }", binding).call(@xml).to_s
     end
-    
-    attr_reader :source, :options
   end
 end
