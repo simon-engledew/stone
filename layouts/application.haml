@@ -1,9 +1,10 @@
 !!!Strict
 %html
   %head
-    %title== Toothygoose - #{@title || 'Untitled'}
+    %title== Simon Engledew - #{@title || 'Untitled'}
     %link{:href => '/stylesheets/application.css', :media => 'screen', :rel => 'stylesheet', :type => 'text/css'}
     %link{:href => '/posts.rss', :rel => :alternate, :type => 'application/rss+xml', :title => 'RSS Feed'}
+    %link{:href => 'http://blog.engledew.com/', :rel => 'canonical'}
     != yield :head
   %body
     #header-container
@@ -26,10 +27,10 @@
                 %a{:href => 'http://github.com/toothygoose/'}<> http://github.com/toothygoose/
               %dd code
               %dt<
-                %a{:href => 'http://twitter.com/toothygoose/'}<> http://twitter.com/toothygoose/
+                %a{:href => 'http://twitter.com/s_engledew/'}<> http://twitter.com/toothygoose/
               %dd distractions
               %dt<
-                %a{:href => 'http://www.toothygoose.com/posts.rss'}<> http://www.toothygoose.com/posts.rss
+                %a{:href => 'http://blog.engledew.com/posts.rss'}<> http://www.toothygoose.com/posts.rss
               %dd feed
             %hr
             %h4 Latest

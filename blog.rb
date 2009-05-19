@@ -28,7 +28,7 @@ module Helpers
   end
   
   def template(filename, locals = {})
-    Templates[filename].render(self.locals.merge(locals), globals, bound_content)
+    Templates[filename].render(self.locals.merge(locals), self.globals, self.bound_content)
   end
 
   def escape(s)
