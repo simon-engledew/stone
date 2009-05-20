@@ -1,0 +1,21 @@
+title: IOError From <code>raw_input()</code> In Jython
+published: t
+category: python
+created_at: 2009-05-20 12:54:38
+
+When I try to use <code>raw_input</code> on my Ubuntu machine in Jython 2.2.1 on Java 1.6.0_07 I get an empty <code>IOError</code> when executing a python file, but not when using a python shell:
+
+<div class="code"><pre><code>-- raw_input.py --
+raw_input()
+
+>> jython raw_input.py 
+Traceback (innermost last):
+  File "raw_input.py", line 1, in ?
+IOError:
+
+-- console --
+>>> raw_input()
+hello
+'hello'</code></pre></div>
+
+To get round this I just use <code>sys.stdin.readline().strip()</code> to read a line from stdin and remove the trailing newline character.
