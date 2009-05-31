@@ -21,8 +21,17 @@ module TemplateHelper
   end
 end
 
+module LinkHelper
+  def root_url
+    return root_url ||= "#{@request.scheme}://#{@request.host}" + if (@request.scheme == 'https' and @request.port != 443) || (@request.scheme == 'http' and @request.port != 80)
+      ":#{@request.port}"
+    end.to_s
+  end
+end
+
 class Stone::Renderer
   include(TemplateHelper)
+  include(LinkHelper)
 end
 
 before do

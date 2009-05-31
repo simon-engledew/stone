@@ -85,7 +85,7 @@ module Stone
     end
     
     def render(binding = binding)
-      eval("lambda { |xml| #{@source} }", binding).call(@xml).to_s
+      eval("lambda { |xml| #{@source} }", binding).call(@xml)
     end
   end
 end

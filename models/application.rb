@@ -7,7 +7,7 @@ module EngineFactory
         when 'haml' then Haml::Engine.new(source)
         when 'sass' then Sass::Engine.new(source, :load_paths => [root], :style => ENV['RACK_ENV'] == 'development' ? :expanded : :compressed)
         when 'builder' then Stone::BuilderEngine.new(source, :indent => 2)
-        else raise 'unknown engine extension: #{extension}'
+        else raise "unknown engine extension: #{extension}"
       end
     end
     
