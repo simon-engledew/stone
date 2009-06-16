@@ -7,4 +7,4 @@ To convert the string Jos&#233; into Jose in python:
 
 <div class="code"><pre><code>import unicodedata
 
-unicodedata.normalize('NFKD', unicodeString).encode('ASCii', 'ignore')</code></pre><div>
+unicodedata.normalize('NFKD', unicodeString).encode('ASCii', 'ignore')</code></pre></div>

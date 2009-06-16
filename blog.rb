@@ -53,6 +53,10 @@ get '/' do
   render('index.haml', :title => 'Home', :posts => Post.all)
 end
 
+get '/archive' do
+  render('index.haml', :title => 'Archive', :posts => Post.all)
+end
+
 get '/post/:permalink' do
   pass unless post = Post.all_by_permalink[params[:permalink]]
   render('show.haml', :title => post.title, :post => post)

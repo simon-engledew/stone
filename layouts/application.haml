@@ -45,6 +45,10 @@
                   %a{:href => "/posts/#{escape(date)}"}<>= date
                   &#x000A;
                   %span.count>== (#{posts.size})
+            %p<
+              %a{:href => '/archive'}<> Archive
+              &#x000A;
+              %span.count>== (#{Post.all.size})
             %hr
             %h4 By Category
             %ul#posts-by-category

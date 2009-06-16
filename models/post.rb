@@ -1,6 +1,6 @@
 class Post
   def initialize(filename)
-    @permalink = File.basename(filename, File.extname(filename))
+    @filename = File.basename(filename, File.extname(filename))
     
     match = File.open(filename, 'r').read.match(/(.*?)^$(.*)/m)
     
@@ -11,6 +11,8 @@ class Post
     @published = attributes['published']
     @created_at = DateTime.parse(attributes['created_at'])
     @title = attributes['title']
+    
+    @permalink = @title.downcase.gsub(/[^-.a-z0-9 ]/, '').tr(' ', '-').squeeze('-')
   end
   
   class << self
@@ -50,5 +52,5 @@ class Post
   
   Post.reload!
   
-  attr_reader :content, :published, :created_at, :title, :permalink, :category
+  attr_reader :content, :published, :created_at, :title, :permalink, :category, :filename
 end
