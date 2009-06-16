@@ -11,8 +11,6 @@ class Post
     @published = attributes['published']
     @created_at = DateTime.parse(attributes['created_at'])
     @title = attributes['title']
-     
-    @permalink = @title.downcase.gsub(/[^-.a-z0-9_ ]/, '').tr('_ ', '-').squeeze('-')
   end
   
   class << self
