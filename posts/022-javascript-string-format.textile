@@ -8,7 +8,9 @@ Here's a useful snippet of JavaScript I use for inserting arguments into a forma
 <div class="code"><pre><code>String.format = function()
 {
   var replacements = arguments;
-  return arguments[0].replace(/\{(\d+)\}/gm, function(string, match) { return replacements[parseInt(match) + 1] });
+  return arguments[0].replace(/\{(\d+)\}/gm, function(string, match) {
+    return replacements[parseInt(match) + 1];
+  });
 }</code></pre></div>
 
 And here it is in action:
