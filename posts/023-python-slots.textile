@@ -3,19 +3,22 @@ published: t
 category: python
 created_at: 2009-07-07 10:42:00
 
-I just got clued in by "Elf Sternberg":http://www.elfsternberg.com/2009/07/06/python-what-the-hell-is-a-slot/comment-page-1/#comment-335 to a really useful feature in Python that I have never heard about before, slots:
+I just got clued in by "Elf Sternberg's Blog":http://www.elfsternberg.com/2009/07/06/python-what-the-hell-is-a-slot/comment-page-1/#comment-335 to a really useful feature in Python that I have never heard about before, slots:
 
 <div class="code"><pre><code>class Foo(object):
     __slots__ = ['x']
     def __init__(self, n):
         self.x = n</code></pre></div>
 
-(His example is a little bit wrong, you have to use new-style classes for this to work)
+From the "Python reference manual":http://www.network-theory.co.uk/docs/pylang/__slots__.html:
 
-From the Python reference manual:
+<blockquote>"By default, instances of both old and new-style classes have a dictionary for attribute storage. This wastes space for objects having very few instance variables. The space consumption can become acute when creating large numbers of instances.
 
-"By default, instances of both old and new-style classes have a dictionary for attribute storage. This wastes space for objects having very few instance variables. The space consumption can become acute when creating large numbers of instances.
+The default can be overridden by defining <code>__slots__</code> in a new-style class definition. The <code>__slots__</code> declaration takes a sequence of instance variables and reserves just enough space in each instance to hold a value for each variable. Space is saved because <code>__dict__</code> is not created for each instance."</blockquote>
 
-The default can be overridden by defining <code>__slots__</code> in a new-style class definition. The <code>__slots__</code> declaration takes a sequence of instance variables and reserves just enough space in each instance to hold a value for each variable. Space is saved because <code>__dict__</code> is not created for each instance."
+At work we have a plans engine that loads millions of little Python objects into memory, so this is a great little optimisation for us.
 
-At work, we have a plans engine that loads millions of little Python objects into memory, so this is a great little optimisation for us.
+Finally, to get a set of every slot attribute in the object hierarcy, you can add this method to your class:
+
+<div class="code"><pre><code>def inherited_slots(self):
+        return set(slot for klass in self.__class__.__mro__ if hasattr(klass, '__slots__') for slot in klass.__slots__)</code></pre></div>

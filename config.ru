@@ -1,6 +1,6 @@
 require 'rubygems'
 
-gem 'sinatra-sinatra'
+# gem 'sinatra-sinatra'
 require 'sinatra'
 
 disable :run
