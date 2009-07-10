@@ -85,4 +85,7 @@ class FlyweightedObject(object):
         return instance
   
     def __getnewargs__(self):
-        tuple(getattr(self, attr) for attr in self.__class__.__init__.im_func.func_code.co_varnames[1:])</code></pre></div>
+        if hasattr(self.__class__.__init__, 'im_func'):
+            constructor = self.__class__.__init__.im_func
+            return tuple(getattr(self, attr) for attr in construtor.func_code.co_varnames[1:])
+        return tuple()</code></pre></div>
