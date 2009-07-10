@@ -3,6 +3,10 @@ published: t
 category: python
 created_at: 2009-07-10 02:55:00
 
+If you are dealing with large static datasets in Python it can be useful to flyweight your objects. With flyweighting, every time you construct a new object you check to see if it already exists. If so, the original object will be returned instead of constructing a duplicated.
+
+Recently I wrote a little bit of code to achieve this in the general case:
+
 <div class="code"><pre><code>import weakref
 
 class FlyweightedObject(object):
@@ -22,19 +26,38 @@ class FlyweightedObject(object):
             instance = object.__new__(klass)
             klass._pool[key] = instance
             
-        return instance
+        return instance</code></pre></div>
 
-class Person(FlyweightedObject):
+Now when you inherit @FlyweightedObject@ you get the flyweighting thrown in for free:
+
+<div class="code"><pre><code>class Person(FlyweightedObject):
     def __init__(self, age, name = 'Simon'):
-        self.name = name
         self.age = age
+        self.name = name
 
 f = Person(1)
 g = Person(1, 'Simon')
 
-print id(f)
-# => 2561616
+print id(f) == id(g)
+# => True</code></pre></div>
 
-print id(g)
-# => 2561616</code></pre></div>
+Of course one thing to watch out for is changing attributes after the object has been constructed. This will lead to the flyweight pool keys and the objects themselves going out of sync:
+
+<div class="code"><pre><code>f = Person(1, 'Dave')
+f.name = 'Simon'  
+
+g = Person(1, 'Simon')
+
+print id(f) == id(g)
+# => False</code></pre></div>
+
+On last thing. To get pickle working with flyweighted objects you'll have to create a @__getnewargs__@ method which returns the tuple that will be passed to @__new__@ on unpickling:
+
+<div class="code"><pre><code>class Person(FlyweightedObject):
+    def __init__(self, age, name = 'Simon'):
+        self.name = name
+        self.age = age
+
+    def __getnewargs__(self):
+        return self.age, self.name</code></pre></div>
 
