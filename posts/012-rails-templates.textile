@@ -7,7 +7,7 @@ TemplateHandlers have been significantly overhauled in Rails 2.2, and these chan
 
 Instead of being responsible for rendering a template, TemplateHandlers should now provide a string of Ruby that will be eval'ed by ActionView further along the rendering chain.
 
-So, where previously a @TemplateHandler@ might declared a *render* method:
+So, where previously a @TemplateHandler@ might have declared a *render* method:
 
 <div class="code"><pre><code class="ruby">class DotHandler < ActionView::TemplateHandlers::ERB
 

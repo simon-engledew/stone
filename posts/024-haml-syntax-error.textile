@@ -11,4 +11,4 @@ you will need to change it to:
 
 <div class="code"><pre><code>%p= ['string ', method, ' string']</code></pre></div>
 
-to avoid compile errors in production mode.
+to avoid compilation errors in production mode.
