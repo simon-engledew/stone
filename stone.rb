@@ -79,7 +79,7 @@ module Stone
   end
 
   class BuilderEngine
-    def initialize(source, options)
+    def initialize(source, options = {})
       @source = source
       @xml = Builder::XmlMarkup.new(options)
     end

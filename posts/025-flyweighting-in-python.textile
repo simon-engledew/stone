@@ -61,31 +61,10 @@ On last thing. To get pickle working with flyweighted objects you'll have to cre
     def __getnewargs__(self):
         return self.age, self.name</code></pre></div>
 
-Although this can also be automated as long as the instance variables are named correctly, giving the final flyweighting class:
+Although this can also be automated as long as the instance variables are named correctly:
 
-<div class="code"><pre><code>import weakref
-
-class FlyweightedObject(object):
-    _pool = weakref.WeakValueDictionary()
-    
-    def __new__(klass, *args):
-        if hasattr(klass.__init__, 'im_func'):
-            constructor = klass.__init__.im_func
-            arguments_missing = constructor.func_code.co_argcount - len(args) - 1
-            if arguments_missing > 0:
-                args += constructor.func_defaults[-arguments_missing:]
-
-        key = (klass,) + args
-        instance = klass._pool.get(key, None)
-
-        if instance is None:
-            instance = object.__new__(klass)
-            klass._pool[key] = instance
-            
-        return instance
-  
-    def __getnewargs__(self):
-        if hasattr(self.__class__.__init__, 'im_func'):
-            constructor = self.__class__.__init__.im_func
-            return tuple(getattr(self, attr) for attr in construtor.func_code.co_varnames[1:])
-        return tuple()</code></pre></div>
+<div class="code"><pre><code>def __getnewargs__(self):
+    if hasattr(self.__class__.__init__, 'im_func'):
+        constructor = self.__class__.__init__.im_func
+        return tuple(getattr(self, attr) for attr in construtor.func_code.co_varnames[1:])
+    return tuple()</code></pre></div>
