@@ -4,24 +4,37 @@
 
 !gutter = 3em
 
+!document_width = 65em
+!navigation_width = 25em
+!gutter_width = 5em
+
 html
   :background-color #eee
 
 body
   :padding = !gutter
+  :text-align center
 
-#page
-  :width 65em
+#document-container
+  :margin 0 auto
+  :width = !document_width
+  :text-align left
+
+#header
+  :margin-left = !navigation_width
+  :line-height 250%
 
 #page-content
-  :width 40em
-  :float left
+  :width = !document_width - !navigation_width
+  :float right
 
 #navigation
+  :text-align right
   #navigation-content
-    :float right
+    :float left
     :margin-top 3em
-    :width 20em
+    :width = !navigation_width - !gutter_width
+    :padding-right = !gutter_width
 
 #page-footer
   :clear both
@@ -48,6 +61,8 @@ blockquote
     :top 2em
 
 .post
+  :border-bottom solid 2px #ddd
+  :padding-bottom 1em
   :margin-bottom 2em
   p
     :text-align justify

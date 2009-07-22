@@ -6,80 +6,81 @@
     %link{:href => '/posts.rss', :rel => :alternate, :type => 'application/rss+xml', :title => 'RSS Feed'}
     != yield :head
   %body
-    #header-container
-      #header<
-        %h1<
-          %a{:href => '/'}<
-            %span Eldritch nomenclature, conjoured for arcane contraptions to execute unerringly.
-    #page-container
-      #page
-        #page-content
-          != yield
-          - unless @request.fullpath == '/'
-            %a{:href => '/'} Home
-          #page_content-footer
-        #navigation
-          #navigation-content
-            %h4 Links
-            %dl#links
-              %dt<
-                %a{:href => 'http://github.com/toothygoose/'}<> http://github.com/toothygoose/
-              %dd code
-              %dt<
-                %a{:href => 'http://twitter.com/s_engledew/'}<> http://twitter.com/s_engledew/
-              %dd distractions
-              %dt<
-                %a{:href => '/posts.rss'}<>= root_url + '/posts.rss'
-              %dd feed
-            %hr
-            %h4 Latest
-            %ul#latest-posts
-              - Post.all[0...5].each do |post|
+    #document-container
+      #header-container
+        #header<
+          %h1<
+            %a{:href => '/'}<
+              %span Eldritch nomenclature, conjoured for arcane contraptions to execute unerringly.
+      #page-container
+        #page
+          #page-content
+            != yield
+            - unless @request.fullpath == '/'
+              %a{:href => '/'} Home
+            #page_content-footer
+          #navigation
+            #navigation-content
+              %h4 Links
+              %dl#links
+                %dt<
+                  %a{:href => 'http://github.com/toothygoose/'}<> http://github.com/toothygoose/
+                %dd code
+                %dt<
+                  %a{:href => 'http://twitter.com/s_engledew/'}<> http://twitter.com/s_engledew/
+                %dd distractions
+                %dt<
+                  %a{:href => '/posts.rss'}<>= root_url + '/posts.rss'
+                %dd feed
+              %hr
+              %h4 Latest
+              %ul#latest-posts
+                - Post.all[0...5].each do |post|
+                  %li<
+                    %a{:href => "/post/#{post.permalink}"}<>= post.title
+              %hr
+              %h4 By Month
+              %ul#posts-by-date
+                - Post.all_by_date.each do |date, posts|
+                  %li<
+                    %a{:href => "/posts/#{escape(date)}"}<>= date
+                    &#x000A;
+                    %span.count>== (#{posts.size})
+              %p<
+                %a{:href => '/archive'}<> Archive
+                &#x000A;
+                %span.count>== (#{Post.all.size})
+              %hr
+              %h4 By Category
+              %ul#posts-by-category
+                - Post.all_by_category.each do |category, posts|
+                  %li<
+                    %a{:href => "/posts/#{escape(category)}"}<>= category
+                    &#x000A;
+                    %span.count>== (#{posts.size})
+              %hr
+              %h4 About
+              %ul
+                %li Powered by Sinatra, <a href="http://github.com/toothygoose/stone">Stone</a> &amp; pixie magic. 
+                %li &copy; Simon Engledew 2008.
+              %hr
+              %h4 Recommendations
+              %ul
                 %li<
-                  %a{:href => "/post/#{post.permalink}"}<>= post.title
-            %hr
-            %h4 By Month
-            %ul#posts-by-date
-              - Post.all_by_date.each do |date, posts|
+                  web-fonts &#8594;&#x000A;
+                  %a{:href => 'http://cufon.shoqolate.com/generate/', :target => '_blank'}<> Cufon
                 %li<
-                  %a{:href => "/posts/#{escape(date)}"}<>= date
-                  &#x000A;
-                  %span.count>== (#{posts.size})
-            %p<
-              %a{:href => '/archive'}<> Archive
-              &#x000A;
-              %span.count>== (#{Post.all.size})
-            %hr
-            %h4 By Category
-            %ul#posts-by-category
-              - Post.all_by_category.each do |category, posts|
+                  code highlighting &#8594;&#x000A;
+                  %a{:href => 'http://softwaremaniacs.org/soft/highlight/en/', :target => '_blank'}<> Highlight
                 %li<
-                  %a{:href => "/posts/#{escape(category)}"}<>= category
-                  &#x000A;
-                  %span.count>== (#{posts.size})
-            %hr
-            %h4 About
-            %ul
-              %li Powered by Sinatra, <a href="http://github.com/toothygoose/stone">Stone</a> &amp; pixie magic. 
-              %li &copy; Simon Engledew 2008.
-            %hr
-            %h4 Recommendations
-            %ul
-              %li<
-                web-fonts &#8594;&#x000A;
-                %a{:href => 'http://cufon.shoqolate.com/generate/', :target => '_blank'}<> Cufon
-              %li<
-                code highlighting &#8594;&#x000A;
-                %a{:href => 'http://softwaremaniacs.org/soft/highlight/en/', :target => '_blank'}<> Highlight
-              %li<
-                markup &#8594;&#x000A;
-                %a{:href => 'http://haml.hamptoncatlin.com/', :target => '_blank'}<> Haml
-                &#x000A;&amp;&#x000A;
-                %a{:href => 'http://sass.hamptoncatlin.com/', :target => '_blank'}<> Sass
-              %li<
-                javascript &#8594;&#x000A;
-                %a{:href => 'http://mootools.net', :target => '_blank'}<> MooTools
-        #page-footer
+                  markup &#8594;&#x000A;
+                  %a{:href => 'http://haml.hamptoncatlin.com/', :target => '_blank'}<> Haml
+                  &#x000A;&amp;&#x000A;
+                  %a{:href => 'http://sass.hamptoncatlin.com/', :target => '_blank'}<> Sass
+                %li<
+                  javascript &#8594;&#x000A;
+                  %a{:href => 'http://mootools.net', :target => '_blank'}<> MooTools
+          #page-footer
 
     :javascript
       var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
