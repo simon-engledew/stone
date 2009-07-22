@@ -77,9 +77,9 @@ module Stone
       super(locals, globals, bound_content)
     end
   end
-
+  
   class BuilderEngine
-    def initialize(source, options)
+    def initialize(source, options = {})
       @source = source
       @xml = Builder::XmlMarkup.new(options)
     end
