@@ -61,7 +61,7 @@
               %hr
               %h4 About
               %ul
-                %li Powered by Sinatra, <a href="http://github.com/toothygoose/stone">Stone</a> &amp; pixie magic. 
+                %li Powered by <a href="http://www.sinatrarb.com/">Sinatra</a>, <a href="http://github.com/toothygoose/stone">Stone</a> &amp; pixie magic. 
                 %li &copy; Simon Engledew 2008.
               %hr
               %h4 Recommendations
@@ -82,9 +82,10 @@
                   %a{:href => 'http://mootools.net', :target => '_blank'}<> MooTools
           #page-footer
 
-    :javascript
-      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-    :javascript
-      var pageTracker = _gat._getTracker("UA-6258918-2");
-      pageTracker._trackPageview();
+    - if ENV['RACK_ENV'] == 'production'
+      :javascript
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+      :javascript
+        var pageTracker = _gat._getTracker("UA-6258918-2");
+        pageTracker._trackPageview();
