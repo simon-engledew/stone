@@ -4,8 +4,8 @@
 
 !gutter = 3em
 
-!document_width = 65em
-!navigation_width = 25em
+!content_width = 40em
+!navigation_width = 20em
 !gutter_width = 5em
 !hr_color = #d4d2ce
 
@@ -18,15 +18,15 @@ body
 
 #document-container
   :margin 0 auto
-  :width = !document_width
+  :width = !content_width + !navigation_width + !gutter_width
   :text-align left
 
 #header
-  :margin-left = !navigation_width
+  :margin-left = !navigation_width + !gutter_width
   :line-height 250%
 
 #page-content
-  :width = !document_width - !navigation_width
+  :width = !content_width
   :float right
 
 #navigation
@@ -34,8 +34,7 @@ body
   #navigation-content
     :float left
     :margin-top 3em
-    :width = !navigation_width - !gutter_width
-    :padding-right = !gutter_width
+    :width = !navigation_width
 
 #page-footer
   :clear both
@@ -53,7 +52,7 @@ h1, p, ul, .code
   :margin-bottom 1em
 
 blockquote
-  :border-left solid 3px #ddd
+  :border-left = solid 3px !hr_color
   :padding-left 2ex
   :margin
     :bottom 2em
@@ -80,8 +79,10 @@ a
   :margin-bottom 3em
   h1
     :letter-spacing -0.05ex
-    :font-size 180%
-    :font-weight normal
+    :font
+      :family Rockwell, 'Trebuchet MS'
+      :size 180%
+      :weight normal
     a
       :text-decoration none
 
@@ -99,6 +100,7 @@ h4
 
 .code
   :padding 1em
+  :margin 1.5em 0
   :background #cfd6e0
   :border solid 1px #9f9f9f
   code
@@ -114,7 +116,7 @@ body
 
 code
   :background-color #fec
-  :font 8pt 'Monaco', 'Courier New', monospace
+  :font 7.8pt 'Monaco', 'Courier New', monospace
 
 #navigation-content
   #links
