@@ -66,5 +66,5 @@ Although this can also be automated as long as the instance variables are named 
 <div class="code"><pre><code>def __getnewargs__(self):
     if hasattr(self.__class__.__init__, 'im_func'):
         constructor = self.__class__.__init__.im_func
-        return tuple(getattr(self, attr) for attr in construtor.func_code.co_varnames[1:])
+        return tuple(getattr(self, attr) for attr in constructor.func_code.co_varnames[1:])
     return tuple()</code></pre></div>
