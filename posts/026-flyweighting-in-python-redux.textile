@@ -6,15 +6,7 @@ created_at: 2009-07-24 01:56:00
 I just expanded the <a href="/post/flyweighting-in-python">Flyweighted Object</a> class to support keyword arguments:
 
 <div class="code"><pre><code>import weakref
-
-def generate_key(o):
-    if hasattr(o, 'items'):
-        return generate_key(sorted(o.items(), lambda a, b: cmp(a[0], b[0])))
-
-    if hasattr(o, '__iter__'):
-        return tuple(generate_key(v) for v in o)
-
-    return o
+import cPickle
 
 class FlyweightedObject(object):
     _pool = weakref.WeakValueDictionary()
@@ -36,7 +28,7 @@ class FlyweightedObject(object):
             varname = varnames[i]
             arguments[varname] = kwargs.get(varname, args[i])
 
-        key = generate_key((klass, arguments))
+        key = cPickle.dumps((klass, arguments))
         instance = klass._pool.get(key, None)
 
         if instance is None:
