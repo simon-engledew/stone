@@ -41,7 +41,7 @@ g = Person(1, 'Simon')
 print id(f) == id(g)
 # => True</code></pre></div>
 
-Of course one thing to watch out for is changing attributes after the object has been constructed. This will lead to the flyweight pool keys and the objects themselves going out of sync:
+One thing to watch out for is changing attributes after the object has been constructed. This will lead to the flyweight pool keys and the objects themselves going out of sync:
 
 <div class="code"><pre><code>f = Person(1, 'Dave')
 f.name = 'Simon'  
@@ -61,7 +61,7 @@ One last thing. To get pickle working with flyweighted objects you'll have to cr
     def __getnewargs__(self):
         return self.age, self.name</code></pre></div>
 
-Although this can also be automated as long as the instance variables are named correctly:
+This can also be automated as long as the instance variables are named correctly:
 
 <div class="code"><pre><code>def __getnewargs__(self):
     if hasattr(self.__class__.__init__, 'im_func'):
