@@ -51,7 +51,7 @@ g = Person(1, 'Simon')
 print id(f) == id(g)
 # => False</code></pre></div>
 
-On last thing. To get pickle working with flyweighted objects you'll have to create a @__getnewargs__@ method which returns the tuple that will be passed to @__new__@ on unpickling:
+One last thing. To get pickle working with flyweighted objects you'll have to create a @__getnewargs__@ method which returns the tuple that will be passed to @__new__@ on unpickling:
 
 <div class="code"><pre><code>class Person(FlyweightedObject):
     def __init__(self, age, name = 'Simon'):
