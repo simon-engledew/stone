@@ -1,5 +1,5 @@
 title: "Reinstalling git on Snow Leopard"
-published: t
+published: true
 category: sysadmin
 created_at: 2009-09-02 21:50:00
 

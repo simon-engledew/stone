@@ -52,18 +52,21 @@ h1, p, ul, .code
   :margin-bottom 1em
 
 blockquote
-  :border-left = solid 3px !hr_color
+  :border-left = "solid" 3px !hr_color
   :padding-left 2ex
   :margin
     :bottom 2em
     :top 2em
 
 .post
-  :border-bottom = solid 1px !hr_color
+  :border-bottom = "solid" 1px !hr_color
   :padding-bottom 1em
   :margin-bottom 2em
   p
     :text-align justify
+
+  &.draft
+    :opacity 0.8
 
 h1, h2, h3, h4, h5, h6
   :font-family 'Helvetica Neue', Helvetica

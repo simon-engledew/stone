@@ -1,5 +1,5 @@
 title: "Ruby Process Lock and graceful failovers"
-published: t
+published: true
 category: ruby
 created_at: 2008-10-29 16:39:02
 

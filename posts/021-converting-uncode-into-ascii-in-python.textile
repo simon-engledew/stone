@@ -1,5 +1,5 @@
 title: "Converting Ascii Into Unicode in Python"
-published: t
+published: true
 category: python
 created_at: 2009-06-15 16:08:00
 

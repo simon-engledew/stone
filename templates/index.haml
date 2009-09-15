@@ -2,5 +2,5 @@
   %h3= @title
 #posts
   - @posts.each do |post|
-    - if post.published
+    - if ENV['RACK_ENV'] == 'development' or post.published?
       != template('post.haml', :post => post)

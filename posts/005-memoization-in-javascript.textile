@@ -1,5 +1,5 @@
 title: "Memoization In Javascript"
-published: t
+published: true
 category: javascript
 created_at: 2008-11-05 16:46:19
 

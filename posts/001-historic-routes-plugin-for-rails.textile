@@ -1,5 +1,5 @@
 title: "Historic Routes plugin for Rails"
-published: t
+published: true
 category: rails
 created_at: 2008-09-20 19:12:54
 

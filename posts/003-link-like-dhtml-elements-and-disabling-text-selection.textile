@@ -1,5 +1,5 @@
 title: "Link-like DHTML elements and disabling text selection"
-published: t
+published: true
 category: javascript
 created_at: 2008-10-10 11:01:38
 
