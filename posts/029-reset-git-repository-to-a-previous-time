@@ -1,0 +1,12 @@
+title: "Reset Git Repository To A Previous Time"
+published: true
+category: sysadmin
+created_at: 2009-10-30 22:38:00
+
+As always, I find myself amazed by Git's sheer flexibility. While trying to reset a branch of my repository to 10 minutes before I had a happy accident, I found that you can use relative times in your commands:
+
+<div class="code"><pre><code>git reset --hard master@{10.minutes.ago}
+
+git diff master master@{1.month.ago}
+
+git show master@{1.month.ago}:config.ru</code></pre></div>
