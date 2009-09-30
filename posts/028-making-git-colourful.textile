@@ -8,6 +8,21 @@ If you are reinstalling git for Snow Leopard, don't forget to nuke MacPorts. Lea
 <div class="code"><pre><code>ld: warning: in /opt/local/lib/libz.dylib, file is not of required architecture
 ld: warning: in /opt/local/lib/libiconv.dylib, file is not of required architecture</code></pre></div>  
 
+Remove MacPorts with the terrifyingly brutal:
+
+<div class="code"><pre><code>sudo rm -rf \
+    /opt/local \
+    /etc/manpaths.d/macports \
+    /etc/paths.d/macports \
+    /Applications/DarwinPorts \
+    /Applications/MacPorts \
+    /Library/LaunchDaemons/org.macports.* \
+    /Library/Receipts/DarwinPorts*.pkg \
+    /Library/Receipts/MacPorts*.pkg \
+    /Library/StartupItems/DarwinPortsStartup \
+    /Library/Tcl/darwinports1.0 \
+    /Library/Tcl/macports1.0</code></pre></div>
+
 Once you have removed MacPorts, the compile process should be as easy as:
 
 <div class="code"><pre><code>make configure 

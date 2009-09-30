@@ -1,5 +1,4 @@
 require 'rubygems'
-
 # gem 'sinatra-sinatra'
 require 'sinatra'
 
