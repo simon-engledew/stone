@@ -1,5 +1,5 @@
 title: "Custom error pages with Nginx and Thin"
-published: t
+published: true
 category: rails
 created_at: 2008-11-21 13:23:57
 

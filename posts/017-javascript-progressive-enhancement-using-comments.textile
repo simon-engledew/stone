@@ -1,5 +1,5 @@
 title: "JavaScript progressive enhancement using comments"
-published: t
+published: true
 category: javascript
 created_at: 2009-04-28 14:46:20
 

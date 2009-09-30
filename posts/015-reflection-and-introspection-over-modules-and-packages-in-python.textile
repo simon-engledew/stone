@@ -1,5 +1,5 @@
 title: "Reflection and Introspection Over Modules and Packages In Python"
-published: t
+published: true
 category: python
 created_at: 2009-03-06 11:39:28
 

@@ -1,4 +1,4 @@
-.post
+.post{:class => @post.published?? nil : 'draft'}
   %h4<
     %a{:href => "/post/#{@post.permalink}"}<>= @post.title
   - month = @post.created_at.strftime('%B %Y')

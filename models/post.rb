@@ -17,7 +17,7 @@ class Post
   
   class << self
     def all
-      @cache[:all] ||= Dir.glob(File.join(ROOT, 'posts', '*')).map{|filename|Post.new(filename)}.sort_by{|post|post.created_at}.reverse
+      @cache[:all] ||= Dir.glob(File.join(ROOT, 'posts', '*')).map{|filename|Post.new(filename)}.sort{|a, b|b.created_at <=> a.created_at}
     end
   
     def all_by_date
@@ -52,5 +52,9 @@ class Post
   
   Post.reload!
   
-  attr_reader :content, :published, :created_at, :title, :permalink, :category, :filename
+  def published?
+    @published
+  end
+  
+  attr_reader :content, :created_at, :title, :permalink, :category, :filename
 end
