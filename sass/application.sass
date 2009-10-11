@@ -1,5 +1,16 @@
 @import reset.sass
 
+/* Font Stacks
+
+!georgia_based = Constantia, 'Lucida Bright', Lucidabright, 'Lucida Serif', Lucida, 'DejaVu Serif', 'Bitstream Vera Serif', 'Liberation Serif', Georgia, serif
+!verdana_based = Corbel, 'Lucida Grande', 'Lucida Sans Unicode', 'DejaVu Sans', 'Bitstream Vera Sans', 'Liberation Sans', Verdana, 'Verdana Ref', sans-serif
+
+!body_stack = !georgia_based
+!code_stack = Monaco, Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L', Monaco, 'Courier New', Courier, monospace
+!title_stack = Rockwell, 'Segoe UI', Candara, 'Bitstream Vera Sans', 'DejaVu Sans', 'Bitsream Vera Sans', 'Trebuchet MS', Verdana, 'Verdana Ref', sans-serif
+!header_stack = 'Helvetica Neue', Helvetica
+
+
 /* Layout
 
 !gutter = 3em
@@ -69,7 +80,7 @@ blockquote
     :opacity 0.8
 
 h1, h2, h3, h4, h5, h6
-  :font-family 'Helvetica Neue', Helvetica
+  :font-family = !header_stack
   :font-weight bold
   a
     :color #231f20
@@ -83,7 +94,7 @@ a
   h1
     :letter-spacing -0.05ex
     :font
-      :family Rockwell, 'Trebuchet MS'
+      :family = !title_stack
       :size 180%
       :weight normal
     a
@@ -112,14 +123,14 @@ h4
     :white-space pre-wrap
 
 body
-  :font-family 'Book Antiqua', 'Georgia', 'Verdana', Helvetica, sans-serif
+  :font-family = !body_stack
   :line-height 150%
   :font-size 11pt
   :color #222
 
 code
   :background-color #fec
-  :font 7.8pt 'Monaco', 'Courier New', monospace
+  :font = 7.8pt !code_stack
 
 #navigation-content
   #links
@@ -129,4 +140,4 @@ code
     li
       :margin-bottom 0.5em
   .count
-    :font 8pt 'Verdana'
+    :font = 8pt !verdana_based

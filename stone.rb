@@ -3,7 +3,6 @@
 require 'rubygems'
 require 'haml'
 require 'sass'
-require 'yaml'
 require 'builder'
 
 module Stone
