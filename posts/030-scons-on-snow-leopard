@@ -1,0 +1,16 @@
+title: "Installing SCons on Snow Leopard"
+published: true
+category: sysadmin
+created_at: 2009-11-10 10:37:00
+
+If you are getting the error:
+
+<div class="code"><pre><code>ImportError: No module named SCons.Script</code></pre></div>
+
+when trying to run SCons in Snow Leopard, the problem is the the way SCons builds your path when launching. SCons expects your packages to be installed at @/System/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/site-packages/scons-1.2.0@, and in Snow Leopard they seem to be at @/Library/Python/2.6/site-packages/scons-1.2.0-py2.6.egg/scons-1.2.0@. There are two solutions to this problem. The first is to set your @SCONS_LIB_DIR@ environment variable to point to the correct package directory:
+
+<div class="code"><pre><code>set SCONS_LIB_DIR="/Library/Python/2.6/site-packages/scons-1.2.0-py2.6.egg/scons-1.2.0"</code></pre></div>
+
+(You'll need to add this to your @~/.bash_profile@ to make this permanent.) The second is to edit your @/Library/Python/2.6/site-packages/scons-1.2.0-py2.6.egg/EGG-INFO/scripts/scons@ file, adding the line:
+
+<div class="code"><pre><code>sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', scons_version)))</code></pre></div>
